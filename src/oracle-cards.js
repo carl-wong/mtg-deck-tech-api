@@ -12,12 +12,12 @@ function createRouter(db) {
 
 		if (req.query.name) {
 			if (typeof req.query.name === 'string') {
-				whereClauses.push(`name='${req.query.name}'`);
+				whereClauses.push(`name=${db.escape(req.query.name)}`);
 			} else if (Array.isArray(req.query.name)) {
 				let subClauses = [];
 
 				req.query.name.forEach(name => {
-					subClauses.push(`name='${name}'`);
+					subClauses.push(`name=${db.escape(name)}`);
 				});
 
 				whereClauses.push(`(${subClauses.join(' OR ')})`);
@@ -25,17 +25,16 @@ function createRouter(db) {
 		}
 
 		let query = 'SELECT * FROM OracleCard';
-		
 		if (whereClauses.length > 0) {
 			query += ' WHERE ' + whereClauses.join(' AND ');
 		}
 
 		db.query(
-			query,
+			 query,
 			(error, results) => {
 				if (error) {
 					console.log(error);
-					res.status(500).json({ status: 'error' });
+					res.status(500).json(null);
 				} else {
 					res.status(200).json(results);
 				}

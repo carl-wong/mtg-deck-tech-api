@@ -6,11 +6,11 @@ function createRouter(db) {
 	router.get('/Tags/:id', function(req, res, next) {
 		db.query(
 			'SELECT * FROM Tag WHERE id=? AND ProfileId=?',
-			[req.params.id,req.params.ProfileId],
+			[req.params.id, req.query.ProfileId],
 			(error, results) => {
 				if (error) {
 					console.log(error);
-					res.status(500).json({ status: 'error' });
+					res.status(500).json(null);
 				} else {
 					res.status(200).json(results);
 				}
@@ -25,7 +25,7 @@ function createRouter(db) {
 			(error, results) => {
 				if (error) {
 					console.log(error);
-					res.status(500).json({ status: 'error' });
+					res.status(500).json(null);
 				} else {
 					res.status(200).json(results);
 				}
@@ -34,14 +34,13 @@ function createRouter(db) {
 	});
 
 	router.post('/Tags', (req, res, next) => {
-		console.log(req);
 		db.query(
 			'INSERT INTO Tag (id, ProfileId, name) VALUES (NULL,?,?)',
-			[req.body.ProfileId,req.body.name],
+			[req.body.ProfileId, req.body.name],
 			(error) => {
 				if (error) {
 					console.error(error);
-					res.status(500).json({ status: 'error' });
+					res.status(500).json(null);
 				} else {
 					res.status(200).json({ status: 'ok' });
 				}
@@ -52,11 +51,11 @@ function createRouter(db) {
 	router.delete('/Tags/:id', function(req, res, next) {
 		db.query(
 			'DELETE FROM Tag WHERE id=? AND ProfileId=?',
-			[req.params.id,req.params.ProfileId],
+			[req.params.id, req.query.ProfileId],
 			(error, results) => {
 				if (error) {
 					console.log(error);
-					res.status(500).json({ status: 'error' });
+					res.status(500).json(null);
 				} else {
 					res.status(200).json(results);
 				}
