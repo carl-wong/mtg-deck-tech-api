@@ -24,13 +24,13 @@ function createRouter(db) {
 			}
 		}
 
-		let query = 'SELECT * FROM OracleCard';
+		let query = 'SELECT COUNT(*) FROM OracleCard';// don't want to return the whole table by default
 		if (whereClauses.length > 0) {
-			query += ' WHERE ' + whereClauses.join(' AND ');
+			query = 'SELECT * FROM OracleCard WHERE ' + whereClauses.join(' AND ');
 		}
 
 		db.query(
-			 query,
+			query,
 			(error, results) => {
 				if (error) {
 					console.log(error);
