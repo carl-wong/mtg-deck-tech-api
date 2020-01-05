@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/carl-wong/mtg-deck-tech-api.git"
   },
-  "author": "",
+  "author": "carl-wong",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/carl-wong/mtg-deck-tech-api/issues"
