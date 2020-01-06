@@ -19,7 +19,7 @@ module.exports = {
 
 Assuming `npm` is installed on your server, run `sudo npm install -g pm2` to install PM2 globally. It will be used to keep the server running permanently.
 
-## Deployment
+## Apache Deployment
 
 Easiest way is using GitHub to sync the repo to `public_html/[root]`, but you can just upload the entire repository to the folder.
 
