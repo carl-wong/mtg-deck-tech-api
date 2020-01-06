@@ -10,24 +10,24 @@ const apiProfiles = require('./profiles');
 const apiTags = require('./tags');
 const apiCardTagLinks = require('./card-tag-links');
 
-const connection = mysql.createConnection({
+const conn = mysql.createConnection({
 	host: dbConfig.host,
 	user: dbConfig.user,
 	password: dbConfig.password,
 	database: dbConfig.database,
 });
 
-connection.connect();
+conn.connect();
 
 const port = process.env.PORT || 3000;
 
 const app = express()
 	.use(cors())
 	.use(bodyParser.json())
-	.use(apiOracleCards(connection))
-	.use(apiProfiles(connection))
-	.use(apiTags(connection))
-	.use(apiCardTagLinks(connection));
+	.use(apiOracleCards(conn))
+	.use(apiProfiles(conn))
+	.use(apiTags(conn))
+	.use(apiCardTagLinks(conn));
 
 app.listen(port, () => {
 	console.log(`Express server running @ http://localhost:${port}`);
