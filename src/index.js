@@ -18,23 +18,15 @@ const pool = mysql.createPool({
 	database: dbConfig.database,
 });
 
-const conn = mysql.createConnection({
-	host: dbConfig.host,
-	user: dbConfig.user,
-	password: dbConfig.password,
-	database: dbConfig.database,
-});
-conn.connect();
-
 const port = process.env.PORT || 3000;
 
 const app = express()
 	.use(cors())
 	.use(bodyParser.json())
-	.use(apiOracleCards(conn))
+	.use(apiOracleCards(pool))
 	.use(apiProfiles(pool))
-	.use(apiTags(conn))
-	.use(apiCardTagLinks(conn));
+	.use(apiTags(pool))
+	.use(apiCardTagLinks(pool));
 
 app.listen(port, () => {
 	console.log(`Express server running @ http://localhost:${port}`);
