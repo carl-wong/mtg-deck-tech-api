@@ -3,6 +3,7 @@ const express = require('express');
 function createRouter(db) {
 	const router = express.Router();
 
+	// getCardTagLink / getCardTagLinks
 	router.get('/Profiles/:id/CardTagLinks', function(req, res, next) {
 		let whereClauses = [];
 
@@ -44,6 +45,7 @@ function createRouter(db) {
 		);
 	});
 
+	// createCardTagLink
 	router.post('/CardTagLinks', (req, res, next) => {
 		db.query(
 			'INSERT INTO CardTagLink (id, ProfileId, TagId, oracle_id) VALUES (NULL,?,?,?)',
@@ -59,6 +61,7 @@ function createRouter(db) {
 		);
 	});
 
+	// deleteCardTagLink
 	router.delete('/CardTagLinks/:id', function(req, res, next) {
 		db.query(
 			'DELETE FROM CardTagLink WHERE id=?',
