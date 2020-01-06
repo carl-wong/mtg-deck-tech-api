@@ -10,13 +10,20 @@ const apiProfiles = require('./profiles');
 const apiTags = require('./tags');
 const apiCardTagLinks = require('./card-tag-links');
 
-const conn = mysql.createConnection({
+const pool = mysql.createPool({
+	connectionLimit: 10,
 	host: dbConfig.host,
 	user: dbConfig.user,
 	password: dbConfig.password,
 	database: dbConfig.database,
 });
 
+const conn = mysql.createConnection({
+	host: dbConfig.host,
+	user: dbConfig.user,
+	password: dbConfig.password,
+	database: dbConfig.database,
+});
 conn.connect();
 
 const port = process.env.PORT || 3000;
@@ -25,7 +32,7 @@ const app = express()
 	.use(cors())
 	.use(bodyParser.json())
 	.use(apiOracleCards(conn))
-	.use(apiProfiles(conn))
+	.use(apiProfiles(pool))
 	.use(apiTags(conn))
 	.use(apiCardTagLinks(conn));
 

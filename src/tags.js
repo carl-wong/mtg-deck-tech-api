@@ -5,9 +5,11 @@ function createRouter(db) {
 
 	// getTags
 	router.get('/Profiles/:id/Tags', function(req, res, next) {
+		let query = 'SELECT Tag.*, CTL.CardTagLinksCount FROM Tag LEFT JOIN (SELECT TagId, COUNT(*) AS CardTagLinksCount FROM CardTagLink GROUP BY TagId) AS CTL ON CTL.TagId = Tag.id';
+		query += ' WHERE Tag.ProfileId=' + req.params.id;
+
 		db.query(
-			'SELECT Tag.*, CTL.CardTagLinksCount FROM Tag LEFT JOIN (SELECT TagId, COUNT(*) AS CardTagLinksCount FROM CardTagLink GROUP BY TagId) AS CTL ON CTL.TagId = Tag.id WHERE ProfileId=?'
-			[req.params.id],
+			query,
 			(error, results) => {
 				if (error) {
 					console.log(error);
@@ -24,12 +26,12 @@ function createRouter(db) {
 		db.query(
 			'INSERT INTO Tag (id, ProfileId, name) VALUES (NULL,?,?)',
 			[req.body.ProfileId, req.body.name],
-			(error) => {
+			(error, results) => {
 				if (error) {
 					console.error(error);
-					res.status(500).json(null);
+					res.status(500).json({ isSuccess: false });
 				} else {
-					res.status(200).json({ status: 'ok' });
+					res.status(200).json({ isSuccess: true, id: results.insertId });
 				}
 			}
 		);
@@ -43,9 +45,9 @@ function createRouter(db) {
 			(error) => {
 				if (error) {
 					console.error(error);
-					res.status(500).json(null);
+					res.status(500).json({ isSuccess: false });
 				} else {
-					res.status(200).json({ status: 'ok' });
+					res.status(200).json({ isSuccess: true });
 				}
 			}
 		);
@@ -56,12 +58,12 @@ function createRouter(db) {
 		db.query(
 			'UPDATE CardTagLink SET TagId=? WHERE TagId=?',
 			[req.params.intoTagId, req.params.fromTagId],
-			(error, results) => {
+			(error) => {
 				if (error) {
 					console.log(error);
-					res.status(500).json(null);
+					res.status(500).json({ isSuccess: false });
 				} else {
-					res.status(200).json(results);
+					res.status(200).json({ isSuccess: true });
 				}
 			}
 		);
@@ -72,12 +74,12 @@ function createRouter(db) {
 		db.query(
 			'DELETE FROM Tag WHERE id=?',
 			[req.params.id],
-			(error, results) => {
+			(error) => {
 				if (error) {
 					console.log(error);
-					res.status(500).json(null);
+					res.status(500).json({ isSuccess: false });
 				} else {
-					res.status(200).json(results);
+					res.status(200).json({ isSuccess: true });
 				}
 			}
 		);
