@@ -6,7 +6,7 @@ function createRouter(db) {
 	// getTags
 	router.get('/Profiles/:id/Tags', function(req, res, next) {
 		db.query(
-			'SELECT * FROM Tag WHERE ProfileId=?',
+			'SELECT Tag.*, CTL.CardTagLinksCount FROM Tag LEFT JOIN (SELECT TagId, COUNT(*) AS CardTagLinksCount FROM CardTagLink GROUP BY TagId) AS CTL ON CTL.TagId = Tag.id WHERE ProfileId=?'
 			[req.params.id],
 			(error, results) => {
 				if (error) {
