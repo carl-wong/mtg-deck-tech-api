@@ -22,6 +22,7 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const dbConfig = require('./connection');
 const pool = mysql.createPool({
+	multipleStatements: true,
 	connectionLimit: 10,
 	host: dbConfig.host,
 	user: dbConfig.user,
