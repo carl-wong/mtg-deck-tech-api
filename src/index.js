@@ -1,10 +1,13 @@
+const config = require('./config');
+
 const express = require('express');
 
 // CORS setup
 const cors = require('cors');
 const corsWhitelist = [
 	'http://localhost:4200',
-	'https://decktech.narl.life'
+	'https://decktech.narl.life',
+	'https://scry-x.com/decktech'
 ];
 const corsOptions = {
 	origin: function(origin, callback) {
@@ -36,7 +39,7 @@ const apiProfiles = require('./profiles');
 const apiTags = require('./tags');
 const apiCardTagLinks = require('./card-tag-links');
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || config.port || 3000;
 
 const app = express()
 	.use(cors(corsOptions))
