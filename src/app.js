@@ -11,17 +11,17 @@ const corsWhitelist = [
 ];
 const corsOptions = {
 	origin: function(origin, callback) {
-	if (origin) {
-		if (corsWhitelist.indexOf(origin) !== -1) {
-			callback(null, true);
+		if (origin) {
+			if (corsWhitelist.indexOf(origin) !== -1) {
+				callback(null, true);
+			} else {
+				callback(new Error('Not allowed by CORS'));
+			}
 		} else {
-			callback(new Error('Not allowed by CORS'));
+			// undefined origin ==> local
+			callback(null, true);
 		}
-	} else {
-		// undefined origin ==> local
-		callback(null, true);
 	}
-}
 }
 
 const bodyParser = require('body-parser');
