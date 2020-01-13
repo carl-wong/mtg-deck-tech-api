@@ -7,16 +7,21 @@ const cors = require('cors');
 const corsWhitelist = [
 	'http://localhost:4200',
 	'https://decktech.narl.life',
-	'https://scry-x.com/decktech'
+	'https://scry-x.com'
 ];
 const corsOptions = {
 	origin: function(origin, callback) {
+	if (origin) {
 		if (corsWhitelist.indexOf(origin) !== -1) {
 			callback(null, true);
 		} else {
 			callback(new Error('Not allowed by CORS'));
 		}
+	} else {
+		// undefined origin ==> local
+		callback(null, true);
 	}
+}
 }
 
 const bodyParser = require('body-parser');
