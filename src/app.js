@@ -6,7 +6,6 @@ const express = require('express');
 const cors = require('cors');
 const corsWhitelist = [
 	'http://localhost:4200',
-	'https://decktech.narl.life',
 	'https://scry-x.com'
 ];
 const corsOptions = {
@@ -18,7 +17,7 @@ const corsOptions = {
 				callback(new Error('Not allowed by CORS'));
 			}
 		} else {
-			// undefined origin ==> local
+			// undefined origin ==> local request
 			callback(null, true);
 		}
 	}
