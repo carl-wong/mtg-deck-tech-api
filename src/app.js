@@ -1,17 +1,24 @@
+const config = require('./config');
+
 const express = require('express');
 
 // CORS setup
 const cors = require('cors');
 const corsWhitelist = [
 	'http://localhost:4200',
-	'https://decktech.narl.life'
+	'https://scry-x.com'
 ];
 const corsOptions = {
 	origin: function(origin, callback) {
-		if (corsWhitelist.indexOf(origin) !== -1) {
-			callback(null, true);
+		if (origin) {
+			if (corsWhitelist.indexOf(origin) !== -1) {
+				callback(null, true);
+			} else {
+				callback(new Error('Not allowed by CORS'));
+			}
 		} else {
-			callback(new Error('Not allowed by CORS'));
+			// undefined origin ==> local request
+			callback(null, true);
 		}
 	}
 }
@@ -22,6 +29,7 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const dbConfig = require('./connection');
 const pool = mysql.createPool({
+	multipleStatements: true,
 	connectionLimit: 10,
 	host: dbConfig.host,
 	user: dbConfig.user,
@@ -35,7 +43,7 @@ const apiProfiles = require('./profiles');
 const apiTags = require('./tags');
 const apiCardTagLinks = require('./card-tag-links');
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || config.port || 3000;
 
 const app = express()
 	.use(cors(corsOptions))
