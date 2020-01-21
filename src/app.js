@@ -1,17 +1,12 @@
 const config = require('./config');
-
 const express = require('express');
 
 // CORS setup
 const cors = require('cors');
-const corsWhitelist = [
-	'http://localhost:4200',
-	'https://scry-x.com'
-];
 const corsOptions = {
 	origin: function(origin, callback) {
 		if (origin) {
-			if (corsWhitelist.indexOf(origin) !== -1) {
+			if (config.whitelist.indexOf(origin) !== -1) {
 				callback(null, true);
 			} else {
 				callback(new Error('Not allowed by CORS'));
@@ -22,8 +17,6 @@ const corsOptions = {
 		}
 	}
 }
-
-const bodyParser = require('body-parser');
 
 // database details
 const mysql = require('mysql');
@@ -44,6 +37,8 @@ const apiTags = require('./tags');
 const apiCardTagLinks = require('./card-tag-links');
 
 const port = process.env.PORT || config.port || 3000;
+
+const bodyParser = require('body-parser');
 
 const app = express()
 	.use(cors(corsOptions))
