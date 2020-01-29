@@ -90,18 +90,18 @@ function createRouter(pool) {
 	});
 
 	router.post('/OracleCards', (req, res, next) => {
-		let whereClauses = [];
+		pool.getConnection(function(err, connection) {
+			let whereClauses = [];
 
-		// req.body.cards: string[]
-		if (req.body.cards) {
-			req.body.cards.forEach(card => {
-				whereClauses.push(`name=${connection.escape(card)}`);
-			});
-		}
+			// req.body.cards: string[]
+			if (req.body.cards) {
+				req.body.cards.forEach(card => {
+					whereClauses.push(`name=${connection.escape(card)}`);
+				});
+			}
 
-		if (whereClauses.length > 0) {
-			const query = 'SELECT * FROM OracleCard WHERE ' + whereClauses.join(' OR ');
-			pool.getConnection(function(err, connection) {
+			if (whereClauses.length > 0) {
+				const query = 'SELECT * FROM OracleCard WHERE ' + whereClauses.join(' OR ');
 				connection.query(
 					query,
 					(error, results) => {
@@ -115,10 +115,10 @@ function createRouter(pool) {
 						}
 					}
 				);
-			});
-		} else {
-			res.status(500).json(null);
-		}
+			} else {
+				res.status(500).json(null);
+			}
+		});
 	});
 
 	return router;
