@@ -49,6 +49,44 @@ function createRouter(pool) {
 		});
 	});
 
+	router.post('/Profiles/:id/CardTagLinks', (req, res, next) => {
+		pool.getConnection(function(err, connection) {
+			let whereClauses = [];
+
+			whereClauses.push(`CardTagLink.ProfileId=${req.params.id}`);
+
+			// req.body.oracle_ids: string[]
+			if (req.body.oracle_ids) {
+				let subClauses = [];
+
+				req.body.oracle_ids.forEach(oracle_id => {
+					subClauses.push(`oracle_id=${connection.escape(oracle_id)}`);
+				});
+
+				whereClauses.push(`(${subClauses.join(' OR ')})`);
+			}
+
+			if (whereClauses.length > 0) {
+				const query = 'SELECT CardTagLink.*, Tag.name as TagName FROM CardTagLink LEFT JOIN Tag ON Tag.id = CardTagLink.TagId WHERE' + whereClauses.join(' AND ');
+				connection.query(
+					query,
+					(error, results) => {
+						connection.release();
+
+						if (error) {
+							console.log(error);
+							res.status(500).json(null);
+						} else {
+							res.status(200).json(results);
+						}
+					}
+				);
+			} else {
+				res.status(500).json(null);
+			}
+		});
+	});
+
 	// createCardTagLink
 	router.post('/CardTagLinks', (req, res, next) => {
 		pool.getConnection(function(err, connection) {
